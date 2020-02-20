@@ -54,13 +54,15 @@
       name: "{{ item }}"
       enabled: yes
       masked: no
+    with_items:
+    - docker
+    - chronyd
+    - zabbix-agent
+    - sysstat
 
   - name: Stop and disable firewalld.
     service:
       name: firewalld
-      state: stopped
-      enabled: False
-
       state: stopped
       enabled: False
 
