@@ -68,7 +68,10 @@
 
   - name: Disable SELinux
     selinux:
-      state: disabled
+      policy: targeted
+      state: permissive
+    notify: Reboot
+    #notify: Wait till my servers will come up online
 
   - name: Copy docker registries.conf file
     copy:
@@ -93,3 +96,17 @@
   handlers:
   - name: Restart Docker
     systemd: name=docker state=restarted
+
+  - name: Reboot
+    shell: reboot now
+    async: 1
+    poll: 0
+
+  - name: Wait till my servers will come up online
+    wait_for:
+      host: "{{ inventory_hostname }}"
+      state: started
+      delay: 5
+      timeout: 40
+    delegate: 127.0.0.1
+ 
