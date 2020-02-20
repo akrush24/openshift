@@ -7,6 +7,10 @@ containerized=false
 
 openshift_deployment_type=origin
 
+# htpasswd auth
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+# Defining htpasswd users
+openshift_master_htpasswd_users={'admin': '$apr1$euWuyiUO$fVJKtVG4hj9Ij54WJUpFr.'}
 
 [OSEv3:children]
 masters
