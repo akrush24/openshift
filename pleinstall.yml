@@ -14,6 +14,7 @@
   - block: # --! Block for RPM Based OS !--
     - name: install EPEL
       yum: name="epel-release" state=installed
+
     - name: install PKGs
       yum: name="{{ item }}" state=installed
       loop:
@@ -68,4 +69,20 @@
   - name: Disable SELinux
     selinux:
       state: disabled
+  
+  - name: Copy docker registries.conf file
+    copy: 
+      src: "files/registries.conf"
+      dest: "/etc/containers/registries.conf"
+      owner: root
+      group: root
+      backup: yes
+      mode: '0644'
+    notyfe: Restart Docker
+
+
+  handlers:
+  - name: Restart Docker
+    systemd: name=docker state=restarted
+
 
