@@ -1,0 +1,22 @@
+[OSEv3:vars]
+ansible_user=root
+become=yes
+openshift_master_default_subdomain=apps.srv.local
+containerized=false
+
+deployment_type=origin
+
+
+[OSEv3:children]
+masters
+nodes
+
+[masters]
+m01.srv.local
+m02.srv.local
+
+[nodes]
+m01.srv.local openshift_schedulable=false openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+m02.srv.local openshift_schedulable=false openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+n01.srv.local openshift_node_labels="{'region': 'primary', 'zone': 'firstzone'}"
+n02.srv.local openshift_node_labels="{'region': 'primary', 'zone': 'secondzone'}"
