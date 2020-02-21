@@ -6,11 +6,15 @@ openshift_master_cluster_hostname=apps.srv.local
 containerized=false
 
 openshift_deployment_type=origin
+openshift_release=3.11
 
 # htpasswd auth
-openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+#openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
 # Defining htpasswd users
-openshift_master_htpasswd_users={'admin': '$apr1$euWuyiUO$fVJKtVG4hj9Ij54WJUpFr.'}
+openshift_master_htpasswd_users={'admin': '$apr1$qzYJ1jLA$1BFGSSq9DHCWInuDarkUr0'}
+openshift_master_htpasswd_file=/etc/origin/master/htpasswd
 
 [OSEv3:children]
 masters

@@ -37,6 +37,7 @@
       - htop
       - pv
       - hping3
+      - httpd-tools
     when: ansible_os_family == "RedHat"
 
   - name: Make sure a service is running
@@ -71,7 +72,20 @@
       policy: targeted
       state: permissive
     notify: Reboot
-    #notify: Wait till my servers will come up online
+
+  - name: Wait till my servers will come up online
+    wait_for:
+      port: "{{ (ansible_port|default(ansible_ssh_port))|default(22) }}"
+      host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+      search_regex: OpenSSH
+      delay: 10  # Do not check for at least 10 sec
+    connection: local
+
+  - name: Check the uptime post reboot
+    shell: uptime
+    register: UPTIME_POST_REBOOT
+
+  - debug: msg={{UPTIME_POST_REBOOT.stdout}}
 
   - name: Copy docker registries.conf file
     copy:
@@ -99,14 +113,15 @@
 
   - name: Reboot
     shell: reboot now
-    async: 1
+    async: 10
+    delay: 10
     poll: 0
 
   - name: Wait till my servers will come up online
     wait_for:
       host: "{{ inventory_hostname }}"
       state: started
-      delay: 5
+      delay: 10
       timeout: 40
     delegate: 127.0.0.1
  
