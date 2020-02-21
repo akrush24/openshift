@@ -114,7 +114,7 @@
   - name: Reboot
     shell: reboot now
     async: 10
-    delay: 10
+    delay: 20
     poll: 0
 
   - name: Wait till my servers will come up online

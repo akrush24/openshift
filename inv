@@ -1,25 +1,29 @@
 [OSEv3:vars]
 ansible_user=root
-become=yes
+#become=yes
 openshift_master_default_subdomain=apps.srv.local
 openshift_master_cluster_hostname=apps.srv.local
-containerized=false
+#os_firewall_use_firewalld=True
+#containerized=false
 
 openshift_deployment_type=origin
 openshift_release=3.11
 
 # htpasswd auth
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
-#openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
-
 # Defining htpasswd users
 openshift_master_htpasswd_users={'admin': '$apr1$qzYJ1jLA$1BFGSSq9DHCWInuDarkUr0'}
 openshift_master_htpasswd_file=/etc/origin/master/htpasswd
+
+# allow unencrypted connection within cluster
+openshift_docker_insecure_registries=172.30.0.0/16
 
 [OSEv3:children]
 masters
 nodes
 etcd
+gluster
+nfs
 
 [masters]
 m0[1:3].srv.local
@@ -29,4 +33,15 @@ m0[1:3].srv.local
 
 [nodes]
 m0[1:3].srv.local openshift_node_group_name='node-config-master'
-n0[1:2].srv.local openshift_node_group_name='node-config-infra'
+n0[1:2].srv.local openshift_node_group_name='node-config-compute'
+infra01.srv.local openshift_node_group_name='node-config-infra'
+
+[gluster]
+g0[1:3].srv.local glusterfs_devices='[ "/dev/sdb" ]' openshift_node_group_name='node-config-compute-storage'
+
+[nfs]
+nfs.srv.local
+
+[lb]
+lb.srv.local
+
