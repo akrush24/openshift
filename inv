@@ -1,9 +1,10 @@
 [OSEv3:vars]
 ansible_user=root
-#become=yes
+become=yes
 openshift_master_default_subdomain=apps.srv.local
 openshift_master_cluster_hostname=apps.srv.local
-#os_firewall_use_firewalld=True
+# use firewalld instead of the default iptables
+os_firewall_use_firewalld=True
 #containerized=false
 
 openshift_deployment_type=origin
@@ -24,6 +25,7 @@ nodes
 etcd
 gluster
 nfs
+lb
 
 [masters]
 m0[1:3].srv.local
