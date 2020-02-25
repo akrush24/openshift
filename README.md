@@ -10,3 +10,9 @@ fix login in web consile error
 ```
 # reboot all master nodes afte installation
 ```
+
+## Bash auto completion
+```
+# yum -y install bash-completion
+# oc completion bash >>/etc/bash_completion.d/oc_completion
+```
